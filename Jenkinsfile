@@ -56,6 +56,7 @@ pipeline {
             steps {
                 script {
                     githubBuildStarted()
+                    sh "npx ng analytics off"
                     sh "npm ci"
                 }
             }
