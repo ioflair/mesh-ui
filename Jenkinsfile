@@ -55,7 +55,7 @@ pipeline {
         stage("Install dependencies") {
             steps {
                 script {
-                    githubBuildStarted()
+                    // githubBuildStarted()
                     sh "echo Hello world!"
                     // sh "npm ci"
                 }
