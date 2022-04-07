@@ -56,74 +56,74 @@ pipeline {
             steps {
                 script {
                     githubBuildStarted()
-                    sh "npx ng analytics off"
-                    sh "npm ci"
+                    sh "echo Hello world!"
+                    // sh "npm ci"
                 }
             }
         }
 
-        stage("Build") {
-            steps {
-                script {
-                    sh "npm run build"
-                }
-            }
-        }
+        // stage("Build") {
+        //     steps {
+        //         script {
+        //             sh "npm run build"
+        //         }
+        //     }
+        // }
 
-        stage("Test") {
-            parallel {
-                stage("Unit Test") {
-                    when {
-                        expression {
-                            return params.unittest
-                        }
-                    }
-                    steps {
-                        script {
-                            sh "npm run test-ci"
-                        }
-                    }
+        // stage("Test") {
+        //     parallel {
+        //         stage("Unit Test") {
+        //             when {
+        //                 expression {
+        //                     return params.unittest
+        //                 }
+        //             }
+        //             steps {
+        //                 script {
+        //                     sh "npm run test-ci"
+        //                 }
+        //             }
 
-                }
+        //         }
 
-                stage("e2e Test") {
-                    when {
-                        expression {
-                            return params.e2etest
-                        }
-                    }
-                    steps {
-                        sh "npm run mesh-ci && npm run e2e-ci"
-                    }
-                }
-            }
-        }
+        //         stage("e2e Test") {
+        //             when {
+        //                 expression {
+        //                     return params.e2etest
+        //                 }
+        //             }
+        //             steps {
+        //                 sh "npm run mesh-ci && npm run e2e-ci"
+        //             }
+        //         }
+        //     }
+        // }
 
-        stage("Deploy") {
-            when {
-                expression {
-                    return params.release != null && params.release != 'none'
-                }
-            }
+        // stage("Deploy") {
+        //     when {
+        //         expression {
+        //             return params.release != null && params.release != 'none'
+        //         }
+        //     }
 
-            steps {
-                script {
-                    sh "npm --no-git-tag-version version ${params.release}"
-                    def buildVars = readJSON file: 'package.json'
-                    sh "./mvnw -B versions:set -DgenerateBackupPoms=false -DnewVersion=" + buildVars.version
+        //     steps {
+        //         script {
+        //             sh "npm --no-git-tag-version version ${params.release}"
+        //             def buildVars = readJSON file: 'package.json'
+        //             sh "./mvnw -B versions:set -DgenerateBackupPoms=false -DnewVersion=" + buildVars.version
 
-                    sshagent(["git"]) {
-                        GitHelper.addCommit('pom.xml package.json package-lock.json', 'Release version ' + buildVars.version)
-                        GitHelper.addTag(buildVars.version, "Release of version " + buildVars.version)
-                        withCredentials([usernamePassword(credentialsId: 'repo.gentics.com', usernameVariable: 'repoUsername', passwordVariable: 'repoPassword')]) {
-                            sh "./mvnw --settings /etc/maven-settings.xml -B deploy"
-                        }
-                        GitHelper.pushBranch(GitHelper.fetchCurrentBranchName())
-                        GitHelper.pushTag(buildVars.version)
-                    }
-                }
-            }
-        }
+        //             sshagent(["git"]) {
+        //                 GitHelper.addCommit('pom.xml package.json package-lock.json', 'Release version ' + buildVars.version)
+        //                 GitHelper.addTag(buildVars.version, "Release of version " + buildVars.version)
+        //                 withCredentials([usernamePassword(credentialsId: 'repo.gentics.com', usernameVariable: 'repoUsername', passwordVariable: 'repoPassword')]) {
+        //                     sh "./mvnw --settings /etc/maven-settings.xml -B deploy"
+        //                 }
+        //                 GitHelper.pushBranch(GitHelper.fetchCurrentBranchName())
+        //                 GitHelper.pushTag(buildVars.version)
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     post {
