@@ -3,7 +3,6 @@ kind: Pod
 spec:
   nodeSelector:
     jenkins_worker: "true"
-
   volumes:
   - name: cache
     hostPath:
@@ -13,14 +12,9 @@ spec:
       claimName: jenkins-credentials
 
   containers:
-  - name: jnlp
-    terminationGracePeriodSeconds: 0
-
   - name: build
     image: gtx-docker-jenkinsbuilds.docker.apa-it.at/gentics/jenkinsbuilds/nodejs-worker:4.0
-    workingDir: '/home/jenkins'
     imagePullPolicy: Always
-    terminationGracePeriodSeconds: 0
     command:
       - cat
     tty: true
@@ -31,13 +25,12 @@ spec:
     securityContext:
       privileged: true
     volumeMounts:
-    - mountPath: /home/jenkins/.npm
+    - mountPath: /home/jenkins/.npm/_cacache
       name: cache
-      subPath: npm
+      subPath: npm/_cacache
     env:
       - name: DOCKER_HOST
-        value: tcp://127.0.0.1:2375
-
+        value: tcp://127.0.0.1:237
   - name: docker
     image: docker:18-dind
     imagePullPolicy: Always
