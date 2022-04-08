@@ -17,7 +17,7 @@ spec:
     terminationGracePeriodSeconds: 0
 
   - name: build
-    image: midiq/jenkins-nodejs-worker:4.0
+    image: gtx-docker-jenkinsbuilds.docker.apa-it.at/gentics/jenkinsbuilds/nodejs-worker:4.0
     workingDir: '/home/jenkins'
     imagePullPolicy: Always
     terminationGracePeriodSeconds: 0
@@ -39,7 +39,7 @@ spec:
         value: tcp://127.0.0.1:2375
 
   - name: docker
-    image: docker:18.09.4-dind
+    image: docker:18-dind
     imagePullPolicy: Always
     terminationGracePeriodSeconds: 0
     args: ["--storage-driver=overlay2"]
