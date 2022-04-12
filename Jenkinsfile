@@ -125,17 +125,17 @@ pipeline {
         }
     }
 
-    // post {
-    //     always {
-    //         script {
-    //             githubBuildEnded()
-    //             if (params.unittest || params.e2etest) {
-    //                 junit(testResults: "reports/**/*.xml")
-    //             }
-    //         }
-    //         notifyMattermostUsers()
-    //     }
-    // }
+    post {
+        always {
+            script {
+                githubBuildEnded()
+                if (params.unittest || params.e2etest) {
+                    junit(testResults: "reports/**/*.xml")
+                }
+            }
+            notifyMattermostUsers()
+        }
+    }
 }
 
 
