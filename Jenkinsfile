@@ -128,12 +128,12 @@ pipeline {
     post {
         always {
             script {
-                githubBuildEnded()
+                // githubBuildEnded()
                 if (params.unittest || params.e2etest) {
                     junit(testResults: "reports/**/*.xml")
                 }
             }
-            notifyMattermostUsers()
+            // notifyMattermostUsers()
         }
     }
 }
