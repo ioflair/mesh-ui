@@ -30,7 +30,7 @@ spec:
       subPath: npm/_cacache
     env:
       - name: DOCKER_HOST
-        value: tcp://127.0.0.1:237
+        value: tcp://127.0.0.1:2375
   - name: docker
     image: docker:18-dind
     imagePullPolicy: Always
